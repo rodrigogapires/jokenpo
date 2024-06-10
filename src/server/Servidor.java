@@ -14,15 +14,18 @@ public class Servidor {
 
         try {
             serverSocket = new ServerSocket(PORTA);
+            System.out.println("Servidor iniciado na porta " + PORTA + ". Esperando conexões...");
 
             while (true) {
-                System.out.println("Aguardando o cliente...");
-                clienteSocket = serverSocket.accept();
+                clienteSocket = serverSocket.accept(); // Aguarda a conexão de um cliente
                 System.out.println(
                         "Cliente conectado: " + clienteSocket.getInetAddress().getHostAddress());
                 Atende atende = new Atende(clienteSocket);
-                atendentes.add(atende);
-                atende.start();
+                synchronized (atendentes) { // Sincroniza a lista de atendentes
+                    atendentes.add(atende);
+                    atendentes.notifyAll(); // Notifica todas as threads esperando por um oponente
+                }
+                atende.start(); // Inicia a thread de atendimento
             }
 
         } catch (Exception e) {
