@@ -33,7 +33,7 @@ public class Cliente {
                 escuta.start();
 
                 System.out.println("Conectado ao servidor.");
-                System.out.println("Informe sua jogada: Pedra, Papel ou Tesoura?");
+                System.out.println("Informe sua jogada: pedra, papel ou tesoura?");
 
                 while (true) {
                     String playerInput = scanner.nextLine();
