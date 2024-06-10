@@ -10,15 +10,17 @@ public class Servidor {
     public static void main(String[] args) {
         final int PORTA = 9876;
         ServerSocket serverSocket;
-        Socket cliente;
+        Socket clienteSocket;
 
         try {
             serverSocket = new ServerSocket(PORTA);
 
             while (true) {
                 System.out.println("Aguardando o cliente...");
-                cliente = serverSocket.accept();
-                Atende atende = new Atende(cliente);
+                clienteSocket = serverSocket.accept();
+                System.out.println(
+                        "Cliente conectado: " + clienteSocket.getInetAddress().getHostAddress());
+                Atende atende = new Atende(clienteSocket);
                 atendentes.add(atende);
                 atende.start();
             }
