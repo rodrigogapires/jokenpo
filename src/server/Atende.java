@@ -13,6 +13,10 @@ public class Atende extends Thread {
     private Atende oponente;
     private static Jokenpo jogo = new Jokenpo();
 
+    private int vitorias = 0;
+    private int derrotas = 0;
+    private int empates = 0;
+
     public Atende(Socket clienteSocket) {
         this.clienteSocket = clienteSocket;
         this.comunicacao = new Comunicacao(clienteSocket);
@@ -75,8 +79,29 @@ public class Atende extends Thread {
                                 "Jogo entre " + jogadorNome + " e " + oponente.jogadorNome,
                                 "Resultado: " + jogadorJogada + " vs " + oponente.jogadorJogada
                                         + " -> " + resultado);
+
+                        // Atualizar estatísticas
+                        if (resultado.equals("empate")) {
+                            this.empates++;
+                            oponente.empates++;
+                        } else if (resultado.equals(jogadorNome)) {
+                            this.vitorias++;
+                            oponente.derrotas++;
+                        } else {
+                            this.derrotas++;
+                            oponente.vitorias++;
+                        }
+
                         enviarMensagem(resultadoMensagem);
                         oponente.enviarMensagem(resultadoMensagem);
+
+                        // Enviar estatísticas atualizadas
+                        enviarMensagem(new Mensagem("Servidor", "Vitórias: " + vitorias
+                                + ", Derrotas: " + derrotas + ", Empates: " + empates));
+                        oponente.enviarMensagem(new Mensagem("Servidor",
+                                "Vitórias: " + oponente.vitorias + ", Derrotas: "
+                                        + oponente.derrotas + ", Empates: " + oponente.empates));
+
                         // Resetar estado para próximo jogo
                         this.jogadorJogada = null;
                         this.oponente.jogadorJogada = null;
