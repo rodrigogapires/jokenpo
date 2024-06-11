@@ -26,6 +26,10 @@ public class Cliente {
             System.out.print("Digite seu nome de usuário: ");
             String username = scanner.nextLine();
 
+            System.out.print(
+                    "Digite 1 para jogar contra a CPU ou 2 para jogar contra outro jogador: ");
+            int tipoDeJogo = Integer.parseInt(scanner.nextLine());
+
             try {
                 socket = new Socket(ip, porta);
                 out = new ObjectOutputStream(socket.getOutputStream());
@@ -33,7 +37,7 @@ public class Cliente {
                 escuta.start();
 
                 System.out.println("Conectado ao servidor.");
-                System.out.println("Informe sua jogada: pedra, papel ou tesoura?");
+                out.writeObject(new Mensagem(username, tipoDeJogo == 1 ? "cpu" : "player"));
 
                 while (true) {
                     String playerInput = scanner.nextLine();

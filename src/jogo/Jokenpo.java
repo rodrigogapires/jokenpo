@@ -18,4 +18,22 @@ public class Jokenpo {
 
         return resultado;
     }
+
+    public String jogarContraCPU(Mensagem player) {
+        String[] opcoes = {"pedra", "papel", "tesoura"};
+        String escolhaCPU = opcoes[(int) (Math.random() * 3)];
+
+        String resultado;
+        if (player.getTexto().equals(escolhaCPU)) {
+            resultado = "empate";
+        } else if ((player.getTexto().equals("pedra") && escolhaCPU.equals("tesoura"))
+                || (player.getTexto().equals("tesoura") && escolhaCPU.equals("papel"))
+                || (player.getTexto().equals("papel") && escolhaCPU.equals("pedra"))) {
+            resultado = player.getNome();
+        } else {
+            resultado = "CPU";
+        }
+
+        return resultado;
+    }
 }
